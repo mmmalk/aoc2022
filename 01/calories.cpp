@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include <sstream>
+#include <fstream>
 
 using namespace std;
 
@@ -21,18 +22,27 @@ const string elvenCaloriesList =
         "\n"
         "10000";
 
-int main (int argc, char *argv[]){
+int main (){
 
 
     map<int, int> elvenCaloriesMap;
     string line;
-    stringstream ss(elvenCaloriesList);
+    ifstream is("./calories.txt");
+    stringstream ss;
+    if(is){
+        ss << is.rdbuf();
+        is.close();
+    } else {
+        cout << "file calories.txt not found in the same directory" << endl;
+        cout << "falling back to example data from the problem definition" << endl;
+        ss << elvenCaloriesList;
+    }
 
     int elf = 0;
     int total = 0;
 
     while (getline(ss, line)){
-        if (line == "") {
+        if (line.empty()) {
             elvenCaloriesMap.insert(pair<int, int>(elf, total));
             elf++;
             total = 0;
