@@ -3,6 +3,7 @@
 #include <map>
 #include <sstream>
 #include <fstream>
+#include <stack>
 
 using namespace std;
 
