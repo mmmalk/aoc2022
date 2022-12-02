@@ -23,14 +23,14 @@ const string elvenCaloriesList =
         "\n"
         "10000";
 
-int main (){
+int main() {
 
 
     map<int, int> elvenCaloriesMap;
     string line;
-    ifstream is("./caories.txt");
+    ifstream is("./calories.txt");
     stringstream ss;
-    if(is){
+    if (is) {
         ss << is.rdbuf();
         is.close();
     } else {
@@ -42,50 +42,40 @@ int main (){
     int elf = 0;
     int total = 0;
 
-    while (getline(ss, line)){
+    while (getline(ss, line)) {
         if (line.empty()) {
-            elvenCaloriesMap.insert(pair<int, int>(elf, total));
+            elvenCaloriesMap.insert(pair<int, int>(total, elf));
             elf++;
             total = 0;
             continue;
-        } else if(!ss.good()){
+        } else if (!ss.good()) { // last line missed otherwise
             total += stoi(line);
-            elvenCaloriesMap.insert(pair<int, int>(elf, total));
+            elvenCaloriesMap.insert(pair<int, int>(total, elf));
             break;
         }
         total += stoi(line);
     }
 
-    int mostCaloriesElf = 0;
-    int mostCalories = 0;
+    int limit = 0;
+    int totalCalories = 0;
+    int maxCalories = 0;
+    int maxCalorieElf = 0;
 
-    int totalCaloriesSum = 0;
-    vector<pair<int, int>> topThreeCalories;
-
-    for (const auto &pair: elvenCaloriesMap){
-        cout << pair.first + 1 << ":" << pair.second << endl;
-        if(pair.second > mostCalories){
-            if(topThreeCalories.size() == 3){
-                topThreeCalories.pop_back();
-            }
-            mostCalories = pair.second;
-            mostCaloriesElf = pair.first + 1;
-
-            topThreeCalories.insert(topThreeCalories.begin(), pair);
+    for (auto i = elvenCaloriesMap.rbegin(); i != elvenCaloriesMap.rend(); ++i) {
+        cout << i->second + 1 << ":" << i->first << endl;
+        totalCalories += i->first;
+        if (i->first > maxCalories) {
+            maxCalories = i->first;
+            maxCalorieElf = i->second + 1;
         }
-
+        if (limit == 2) {
+            break;
+        }
+        limit++;
     }
 
-    cout << "Most calories: " << mostCalories << endl;
-    cout << "On elf number: " << mostCaloriesElf << endl;
+    cout << "max: elf number " << maxCalorieElf << " with " << maxCalories << " calories" << endl;
+    cout << "total top-3 calories: " << totalCalories << endl;
 
-    cout << "top three:" << endl;
-    for(const auto &pair: topThreeCalories){
-        cout << pair.first + 1 << " : " << pair.second << endl;
-        totalCaloriesSum += pair.second;
-    }
-
-    cout << "Total of the top-3 sums is: " << totalCaloriesSum << endl;
-
-	return 0;
+    return 0;
 }

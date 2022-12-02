@@ -4,6 +4,10 @@ project(aoc2022)
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(01)
+include_directories(02)
 
-add_executable(aoc2022
+add_executable(calories
         01/calories.cpp)
+
+add_executable(rps
+        02/rockpaperscissors.cpp)
