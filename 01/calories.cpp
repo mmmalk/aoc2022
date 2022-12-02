@@ -3,7 +3,7 @@
 #include <map>
 #include <sstream>
 #include <fstream>
-#include <stack>
+#include <vector>
 
 using namespace std;
 
@@ -28,7 +28,7 @@ int main (){
 
     map<int, int> elvenCaloriesMap;
     string line;
-    ifstream is("./calories.txt");
+    ifstream is("./caories.txt");
     stringstream ss;
     if(is){
         ss << is.rdbuf();
@@ -60,18 +60,18 @@ int main (){
     int mostCalories = 0;
 
     int totalCaloriesSum = 0;
-    stack<pair<int, int>> topThreeCalories;
+    vector<pair<int, int>> topThreeCalories;
 
     for (const auto &pair: elvenCaloriesMap){
         cout << pair.first + 1 << ":" << pair.second << endl;
         if(pair.second > mostCalories){
-            if(topThreecalories.size() == 3){
-                topThreeCalories.pop();
+            if(topThreeCalories.size() == 3){
+                topThreeCalories.pop_back();
             }
             mostCalories = pair.second;
             mostCaloriesElf = pair.first + 1;
 
-            topThreeCalories.push(pair);
+            topThreeCalories.insert(topThreeCalories.begin(), pair);
         }
 
     }
@@ -82,7 +82,10 @@ int main (){
     cout << "top three:" << endl;
     for(const auto &pair: topThreeCalories){
         cout << pair.first + 1 << " : " << pair.second << endl;
+        totalCaloriesSum += pair.second;
     }
+
+    cout << "Total of the top-3 sums is: " << totalCaloriesSum << endl;
 
 	return 0;
 }
