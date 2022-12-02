@@ -58,17 +58,30 @@ int main (){
     int mostCaloriesElf = 0;
     int mostCalories = 0;
 
+    int totalCaloriesSum = 0;
+    stack<pair<int, int>> topThreeCalories;
+
     for (const auto &pair: elvenCaloriesMap){
         cout << pair.first + 1 << ":" << pair.second << endl;
         if(pair.second > mostCalories){
+            if(topThreecalories.size() == 3){
+                topThreeCalories.pop();
+            }
             mostCalories = pair.second;
             mostCaloriesElf = pair.first + 1;
+
+            topThreeCalories.push(pair);
         }
 
     }
 
     cout << "Most calories: " << mostCalories << endl;
     cout << "On elf number: " << mostCaloriesElf << endl;
+
+    cout << "top three:" << endl;
+    for(const auto &pair: topThreeCalories){
+        cout << pair.first + 1 << " : " << pair.second << endl;
+    }
 
 	return 0;
 }
