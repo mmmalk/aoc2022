@@ -70,30 +70,29 @@ int main() {
             cout << "your character: " << pair.second << endl;
             return EXIT_FAILURE;
         }
-        if(DEBUG) {
-            cout << pair.first << " : " << pair.second << endl;
-            cout << opponentHand << " : " << yourHand << endl;
-            cout << "from result: " <<(resolve(opponentHand, yourHand)) << " from your hand: " << yourHand<< endl;
-        }
         totalScore += yourHand;
         totalScore += resolve(opponentHand, yourHand);
-        cout << "total so far: " << totalScore << endl;
+
+        if (DEBUG) {
+            cout << pair.first << " : " << pair.second << endl;
+            cout << opponentHand << " : " << yourHand << endl;
+            cout << "from result: " << (resolve(opponentHand, yourHand)) << " from your hand: " << yourHand << endl;
+            cout << "total so far: " << totalScore << endl;
+        }
+
     }
     cout << "score total: " << totalScore << endl;
 
     return EXIT_SUCCESS;
 }
 
-//shamelessly took this off from the internet:
-//https://learningpenguin.net/2020/02/06/a-simple-algorithm-for-calculating-the-result-of-rock-paper-scissors-game/
 result resolve(int opponent, int you) {
-
-    if ((opponent + 1) % 3 == you) {
-        return result::win;
+    if ((you % 3) == (opponent - 1)) {
+        return result::loss;
     } else if (opponent == you) {
         return result::draw;
     } else {
-        return result::loss;
+        return result::win;
     }
 }
 
@@ -107,12 +106,12 @@ vector<pair<char, char>> giveGuide(const string &inputFile) {
     ifstream is(inputFile);
     stringstream ss;
     string line;
-    const char* lineChars;
+    const char *lineChars;
     vector<pair<char, char>> guide;
     if (is) {
         ss << is.rdbuf();
         is.close();
-        while(getline(ss, line)){
+        while (getline(ss, line)) {
             lineChars = line.c_str();
             // since data is always C Z
             guide.push_back({lineChars[0], lineChars[2]});
@@ -126,6 +125,7 @@ vector<pair<char, char>> giveGuide(const string &inputFile) {
                 {'B', 'X'},
                 {'C', 'Z'},
                 {'B', 'Z'}
+
         };
     }
     return guide;
