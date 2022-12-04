@@ -4,7 +4,8 @@
 #include <fstream>
 #include <sstream>
 
-#define DEBUG true
+#define DEBUG1 false
+#define DEBUG2 false
 
 using namespace std;
 
@@ -25,14 +26,17 @@ enum hand {
 
 // implements the winner on 2-dimensional array
 result resolve(int opponent, int you);
+hand getYourHand(int opponent, int result);
 
 vector<pair<char, char>> giveGuide(const string &inputFile);
 
 int main() {
 
     int totalScore = 0;
+    int otherScore = 0;
     hand yourHand;
     hand opponentHand;
+    result supposedResult;
     const string fileName = "./rps.txt";
     auto guide = giveGuide(fileName);
 
@@ -53,12 +57,15 @@ int main() {
         switch (pair.second) {
             case 'X':
                 yourHand = hand::rock;
+                supposedResult = result::loss;
                 break;
             case 'Y':
                 yourHand = hand::paper;
+                supposedResult = result::draw;
                 break;
             case 'Z':
                 yourHand = hand::scissors;
+                supposedResult = result::win;
                 break;
             default:
                 yourHand = hand::nil;
@@ -73,15 +80,24 @@ int main() {
         totalScore += yourHand;
         totalScore += resolve(opponentHand, yourHand);
 
-        if (DEBUG) {
+        otherScore += supposedResult;
+        otherScore += getYourHand(opponentHand, supposedResult);
+
+        if (DEBUG1) {
             cout << pair.first << " : " << pair.second << endl;
             cout << opponentHand << " : " << yourHand << endl;
             cout << "from result: " << (resolve(opponentHand, yourHand)) << " from your hand: " << yourHand << endl;
             cout << "total so far: " << totalScore << endl;
         }
+        if(DEBUG2){
+            cout << pair.first << " : " << pair.second << endl;
+            cout << opponentHand << " : " << supposedResult << endl;
+            cout << "so your hand should be: " << (getYourHand(opponentHand, supposedResult)) << endl;
+        }
 
     }
-    cout << "score total: " << totalScore << endl;
+    cout << "score total based on hand: " << totalScore << endl;
+    cout << "score total based on result: " << otherScore << endl;
 
     return EXIT_SUCCESS;
 }
@@ -96,12 +112,32 @@ result resolve(int opponent, int you) {
     }
 }
 
-/* Notation:
- * opponent         you
- * A = rock        X = rock
- * B = paper       Y = paper
- * C = scissors    Z = scissors
- */
+hand getYourHand(int opponent, int result) {
+    if(result == result::draw){
+        return hand(opponent);
+    } else if(opponent == hand::scissors){
+        if(result == result::win){
+            return hand::rock;
+        } else{
+            return hand::paper;
+        }
+    } else if(opponent == hand::rock){
+        if (result == result::win){
+            return hand::paper;
+        } else {
+            return hand::scissors;
+        }
+    } else if (opponent == hand::paper){
+        if (result == result::win){
+            return hand::scissors;
+        } else {
+            return hand::rock;
+        }
+    }
+
+    return hand::nil;
+}
+
 vector<pair<char, char>> giveGuide(const string &inputFile) {
     ifstream is(inputFile);
     stringstream ss;
@@ -124,8 +160,6 @@ vector<pair<char, char>> giveGuide(const string &inputFile) {
                 {'A', 'Y'},
                 {'B', 'X'},
                 {'C', 'Z'},
-                {'B', 'Z'}
-
         };
     }
     return guide;
