@@ -11,3 +11,6 @@ add_executable(calories
 
 add_executable(rps
         02/rockpaperscissors.cpp)
+
+add_executable(rucksack
+        03/rucksack.cpp)
