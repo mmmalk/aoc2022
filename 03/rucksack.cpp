@@ -70,7 +70,7 @@ int main() {
 
         }
         cout << linecount << " lines read" << endl;
-        for(const auto &item: rucksackCommon){
+        for (const auto &item: rucksackCommon) {
             cout << item << endl;
             prioSum += priority[item];
         }
@@ -96,10 +96,8 @@ vector<char> findCommon(const string &input1, const string &input2) {
 
     for (char c1: input1) {
         for (char c2: input2) {
-            if (c1 == c2) {
-                if (find(result.begin(), result.end(), c1) == result.end()) {
+            if (c1 == c2 && find(result.begin(), result.end(), c1) == result.end()) {
                     result.push_back(c1);
-                }
             }
         }
     }
@@ -110,18 +108,9 @@ vector<char> findCommon(const string &input1, const string &input2) {
 // jesus this is not optimal, this is truly not optimal.
 vector<char> findCommonFromThree(const string &rucksack1, const string &rucksack2, const string &rucksack3) {
     vector<char> result;
-    for(char c1: rucksack1){
-        for (char c2: rucksack2){
-            for(char c3: rucksack3){
-                if(c1 == c2 && c2 == c3){
-                    if (find(result.begin(), result.end(), c1) == result.end()) {
-                        result.push_back(c1);
-                    }
-                }
-            }
-        }
-    }
-
+    auto tmp1 = findCommon(rucksack1, rucksack2);
+    auto tmp2 = findCommon(rucksack2, rucksack3);
+    result = findCommon(string(tmp1.begin(), tmp1.end()), string(tmp2.begin(), tmp2.end()));
 
     return result;
 }
