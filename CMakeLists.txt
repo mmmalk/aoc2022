@@ -7,10 +7,13 @@ include_directories(01)
 include_directories(02)
 
 add_executable(calories
-        01/calories.cpp)
+        01/calories.cpp 04/cleanup.cpp)
 
 add_executable(rps
         02/rockpaperscissors.cpp)
 
 add_executable(rucksack
         03/rucksack.cpp)
+
+add_executable(cleanup
+        04/cleanup.cpp)
