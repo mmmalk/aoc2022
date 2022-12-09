@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -13,20 +14,20 @@ const string pairs="2-4,6-8\n"
                    "2-6,4-8\n"
                    ;
 
-vector<pair<pair<int, int>, pair<int, int>>> buildVector(stringstream &ss);
+vector<pair<pair<int, int>, pair<int, int>>> buildCleanUpDetails(stringstream &ss);
+stringstream openData(const string &filename);
+bool containsAnother(const pair<int, int> &first, const pair<int, int> &second);
 
 int main(){
 
-    stringstream ss;
-    ss << pairs;
-
-    auto cleanUpDetails= buildVector(ss);
+    auto ss = openData("./cleanup.txt");
+    auto cleanUpDetails= buildCleanUpDetails(ss);
 
 
     return EXIT_SUCCESS;
 }
 
-vector<pair<pair<int, int>, pair<int, int>>> buildVector(stringstream &ss){
+vector<pair<pair<int, int>, pair<int, int>>> buildCleanUpDetails(stringstream &ss){
 
     vector<pair<pair<int, int>, pair<int, int>>> pairVector;
     string line;
@@ -54,4 +55,33 @@ vector<pair<pair<int, int>, pair<int, int>>> buildVector(stringstream &ss){
     }
 
     return pairVector;
+}
+
+stringstream openData(const string &filename){
+
+    stringstream returnStream;
+
+    auto is = ifstream(filename);
+    if(is){
+        returnStream << is.rdbuf();
+        is.close();
+    } else {
+        returnStream << pairs;
+        cout << "File " << filename << " not found, using example data from the assignment!" << endl;
+    }
+
+    return returnStream;
+
+}
+
+//check if first fully contains the second
+bool containsAnother(const pair<int, int> &first, const pair<int, int> &second){
+    int lowerLim = first.first;
+    int upperLim = first.second;
+
+    if(second.first > lowerLim && second.second < upperLim){
+        return true;
+    }
+
+    return false;
 }
